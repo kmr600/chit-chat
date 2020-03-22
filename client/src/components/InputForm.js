@@ -2,10 +2,13 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { useSocket } from "use-socketio";
 import { useSelector } from "react-redux";
+import Filter from "bad-words";
 import TextareaAutosize from "react-autosize-textarea";
 import ArrowUp from "../icons/ArrowUp";
 import { useDispatch } from "react-redux";
 import { sendMessage } from "../actions/chat";
+
+const filter = new Filter();
 
 const Form = styled.form`
   position: relative;
@@ -96,10 +99,13 @@ const Input = () => {
     // check if message has content
     if (!message.length) return;
 
+    // filter out profanity
+    const filteredMessage = filter.clean(message);
+
     // add message to chatroom
-    sendMessageAction(data);
+    sendMessageAction({ ...data, message: filteredMessage });
     // send data to server for others to receive
-    socket.emit("sendMessage", data);
+    socket.emit("sendMessage", { ...data, message: filteredMessage });
     // clear input
     setData({ ...data, message: "" });
     // set focus back to text area
@@ -116,6 +122,7 @@ const Input = () => {
         placeholder="Say something..."
         onChange={e => handleChange(e)}
         ref={textarea}
+        onKeyPress={e => e.key === "Enter" && handleSubmit(e)}
       />
 
       <Button type="submit">
