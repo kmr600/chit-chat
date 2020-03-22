@@ -53,14 +53,17 @@ module.exports = server => {
       }
 
       // Save username so that it can referenced on leave or disconnect
-      socket.username = user.username;
+      if (user) {
+        socket.username = user.username;
+        console.log("A user joined chat");
+      }
 
       io.emit("join", { error, user });
     });
 
     // Send/receive messages
     socket.on("sendMessage", ({ username, message }) => {
-      io.emit("newMessage", { username, message });
+      socket.broadcast.emit("newMessage", { username, message });
     });
 
     // Remove user from chatroom on manual leave, such as clicking a button
