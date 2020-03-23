@@ -1,6 +1,7 @@
 import React, { Fragment, useCallback } from "react";
 import styled from "styled-components";
 import { useSocket } from "use-socketio";
+import Menu from "../components/Menu";
 import Header from "../components/Header";
 import Container from "../components/Container";
 import Name from "../components/Name";
@@ -33,52 +34,56 @@ const Chatroom = () => {
   });
 
   return (
-    <Fragment>
-      <Header />
+    <div id="outer-container">
+      <Menu />
 
-      <Container>
-        <Chat>
-          <Name host={true}>Kyle</Name>
-          <Message>👋 Good evening, chat!</Message>
-          <Message>
-            Tonight we are building a chat app. Should be lots of fun! Tonight
-            we are building a chat app. Should be lots of fun! Tonight we are
-            building a chat app. Should be lots of fun! Tonight we are building
-            a chat app. Should be lots of fun!
-          </Message>
+      <div id="page-wrap">
+        <Header />
 
-          <Name>zoubizoub</Name>
-          <Message>I'm addicted to Overwatch...</Message>
+        <Container>
+          <Chat>
+            <Name host={true}>Kyle</Name>
+            <Message>👋 Good evening, chat!</Message>
+            <Message>
+              Tonight we are building a chat app. Should be lots of fun! Tonight
+              we are building a chat app. Should be lots of fun! Tonight we are
+              building a chat app. Should be lots of fun! Tonight we are
+              building a chat app. Should be lots of fun!
+            </Message>
 
-          <Name>YorgYetson</Name>
-          <Message>Bro, you have a problem...</Message>
+            <Name>zoubizoub</Name>
+            <Message>I'm addicted to Overwatch...</Message>
 
-          <Name>furnicarul069</Name>
-          <Message>😂😂😂</Message>
+            <Name>YorgYetson</Name>
+            <Message>Bro, you have a problem...</Message>
 
-          <Message currentUser={true}>C'mon guys, stay focused.</Message>
+            <Name>furnicarul069</Name>
+            <Message>😂😂😂</Message>
 
-          {messages.map((message, key, allMessages) => {
-            return message.username === user.username ? (
-              <Message currentUser={true} key={key}>
-                {message.message}
-              </Message>
-            ) : (
-              <Fragment key={key}>
-                {/* don't show username if previous message was sent by the same user */}
-                {(key === 0 ||
-                  allMessages[key - 1].username !== message.username) && (
-                  <Name>{message.username}</Name>
-                )}
-                <Message>{message.message}</Message>
-              </Fragment>
-            );
-          })}
-        </Chat>
+            <Message currentUser={true}>C'mon guys, stay focused.</Message>
 
-        <InputForm />
-      </Container>
-    </Fragment>
+            {messages.map((message, key, allMessages) => {
+              return message.username === user.username ? (
+                <Message currentUser={true} key={key}>
+                  {message.message}
+                </Message>
+              ) : (
+                <Fragment key={key}>
+                  {/* don't show username if previous message was sent by the same user */}
+                  {(key === 0 ||
+                    allMessages[key - 1].username !== message.username) && (
+                    <Name>{message.username}</Name>
+                  )}
+                  <Message>{message.message}</Message>
+                </Fragment>
+              );
+            })}
+          </Chat>
+
+          <InputForm />
+        </Container>
+      </div>
+    </div>
   );
 };
 

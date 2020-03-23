@@ -7,3 +7,7 @@ export const CHAT_LEAVE = "CHAT_LEAVE";
 // Messages
 export const SEND_MESSAGE = "SEND_MESSAGE";
 export const NEW_MESSAGE = "NEW_MESSAGE";
+
+// Menu
+export const TOGGLE_MENU = "TOGGLE_MENU";
+export const SET_MENU_IS_OPEN = "SET_MENU_IS_OPEN";
