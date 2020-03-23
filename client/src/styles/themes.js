@@ -9,7 +9,7 @@ export const themes = {
   light: {
     type: "light",
     // bgColor: "#FFFFFF",
-    bgColor: "#FAFAFA",
+    bgColor: "#F1F3F6",
     color: "#111111",
     bodyColor: "#333333"
   },

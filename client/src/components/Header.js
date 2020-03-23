@@ -69,7 +69,12 @@ const Header = () => {
     <Wrapper>
       <Container>
         <TitleWrapper>
-          <Title>Chat</Title>
+          <Title>
+            <span role="img" aria-label="logo">
+              💬
+            </span>
+            &nbsp;Chat
+          </Title>
           <OnlineWrapper>
             <OnlineCircle />
             <OnlineText>{"<number>"} online</OnlineText>

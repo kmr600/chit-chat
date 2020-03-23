@@ -2,6 +2,7 @@ import { SEND_MESSAGE, NEW_MESSAGE } from "../actions/types";
 
 const intialState = {
   messages: [],
+  users: [],
   loading: false,
   error: false
 };

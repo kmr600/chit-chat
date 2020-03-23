@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   max-width: 100%;
   align-self: ${props => props.currentUser && "flex-end"};
   border-radius: ${props =>
-    props.currentUser ? "16px 0px 16px 16px" : "0px 16px 16px 16px"};
+    props.currentUser ? "16px 16px 0px 16px" : "0px 16px 16px 16px"};
   background: ${props => (props.currentUser ? props.theme.purple : "#FFF")};
   color: ${props => (props.currentUser ? "#FFF" : "#000")};
   margin-bottom: 14px;

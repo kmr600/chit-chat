@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   display: inline-block;
   color: #444444;
   font-size: 15px;
+  word-break: break-word;
 `;
 
 const Name = ({ children, host }) => {
