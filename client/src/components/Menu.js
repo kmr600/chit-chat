@@ -1,21 +1,26 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
+import { useSocket } from "use-socketio";
 import { useSelector, useDispatch } from "react-redux";
 import { push as BurgerMenu } from "react-burger-menu";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Users from "../components/Users";
 import Settings from "../components/Settings";
+import LogOut from "../icons/LogOut";
+import { chatLeave } from "../actions/auth";
+import { newMessage } from "../actions/chat";
 import { setMenuIsOpen } from "../actions/menu";
 
 const StyledBurgerMenu = styled(BurgerMenu)`
   .bm-menu-wrap {
     position: fixed;
-    height: 100%;
+    min-height: 100%;
     box-shadow: 1px 0px 7px 0px #aaaaaa;
   }
   .bm-menu {
     background: ${props => props.theme.secondaryBgColor};
     padding: 70px;
+    min-height: 100%;
   }
   .bm-item-list {
     display: flex;
@@ -35,6 +40,18 @@ const StyledBurgerMenu = styled(BurgerMenu)`
 const Title = styled.h3`
   font-size: 36px;
   word-break: break-word;
+`;
+
+const LeaveChat = styled.button`
+  color: #cc2e21;
+  font-size: 15px;
+  margin: 40px auto 0;
+  display: flex !important;
+  align-items: center;
+
+  svg {
+    margin-right: 8px;
+  }
 `;
 
 const StyledTabs = styled(Tabs)`
@@ -84,6 +101,23 @@ const Menu = () => {
     },
     [dispatch]
   );
+  const chatLeaveAction = useCallback(() => {
+    dispatch(chatLeave());
+  }, [dispatch]);
+  const newMessageAction = useCallback(
+    payload => {
+      dispatch(newMessage(payload));
+    },
+    [dispatch]
+  );
+
+  // logout when leaving chat, and emit an event for others to see who left
+  const handleLeave = () => {
+    socket.emit("leave");
+    chatLeaveAction();
+  };
+
+  const { socket } = useSocket();
 
   return (
     <StyledBurgerMenu
@@ -103,6 +137,10 @@ const Menu = () => {
           👋
         </span>
       </Title>
+
+      <LeaveChat onClick={() => handleLeave()}>
+        <LogOut /> Leave chat
+      </LeaveChat>
 
       <StyledTabs selectedTabClassName="selected">
         <StyledTabList>

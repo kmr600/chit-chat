@@ -4,8 +4,8 @@ import styled from "styled-components";
 const Svg = styled.svg`
   width: 24px;
   height: 24px;
-  stroke: #000;
   stroke-width: 1.5;
+  stroke: #cc2e21;
 `;
 
 export default () => (
@@ -16,7 +16,8 @@ export default () => (
     stroke-linejoin="round"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <line x1="19" y1="12" x2="5" y2="12"></line>
-    <polyline points="12 19 5 12 12 5"></polyline>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+    <polyline points="16 17 21 12 16 7"></polyline>
+    <line x1="21" y1="12" x2="9" y2="12"></line>
   </Svg>
 );

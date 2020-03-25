@@ -1,9 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { useSocket } from "use-socketio";
 import More from "../icons/More";
 import { useDispatch } from "react-redux";
-import { chatLeave } from "../actions/auth";
 import { toggleMenu } from "../actions/menu";
 
 const Wrapper = styled.div`
@@ -53,17 +51,9 @@ const OnlineText = styled.p`
 const Header = () => {
   // Redux
   const dispatch = useDispatch();
-  const chatLeaveAction = useCallback(() => {
-    dispatch(chatLeave());
-  }, [dispatch]);
   const toggleMenuAction = useCallback(() => {
     dispatch(toggleMenu());
   }, [dispatch]);
-
-  useSocket("leave", ({ username }) => {
-    console.log(username + " left the chat");
-    chatLeaveAction();
-  });
 
   return (
     <Wrapper>

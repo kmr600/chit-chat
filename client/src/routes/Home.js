@@ -73,8 +73,8 @@ const Home = () => {
   // set focus to input on load
   const input = useRef(null);
   useEffect(() => {
-    input.current.focus();
-  }, []);
+    if (input) input.current.focus();
+  }, [input]);
 
   // Redux
   const { isAuthenticated } = useSelector(state => state.auth);

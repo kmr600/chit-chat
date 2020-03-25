@@ -6,6 +6,8 @@ import Header from "../components/Header";
 import Container from "../components/Container";
 import Name from "../components/Name";
 import Message from "../components/Message";
+import JoinChat from "../components/JoinChat";
+import LeftChat from "../components/LeftChat";
 import InputForm from "../components/InputForm";
 import { useSelector, useDispatch } from "react-redux";
 import { newMessage } from "../actions/chat";
@@ -31,6 +33,16 @@ const Chatroom = () => {
 
   useSocket("newMessage", data => {
     newMessageAction(data);
+  });
+
+  // Add message to show that a user has joined the chat
+  useSocket("join", ({ user: { username } }) => {
+    newMessageAction({ username, status: "join" });
+  });
+
+  // Add message to show that a user has left
+  useSocket("leave", ({ username }) => {
+    newMessageAction({ username, status: "leave" });
   });
 
   return (
@@ -62,20 +74,28 @@ const Chatroom = () => {
 
             <Message currentUser={true}>C'mon guys, stay focused.</Message>
 
+            <LeftChat>simon2610</LeftChat>
+
             {messages.map((message, key, allMessages) => {
-              return message.username === user.username ? (
-                <Message currentUser={true} key={key}>
-                  {message.message}
-                </Message>
+              return message.message ? (
+                message.username === user.username ? (
+                  <Message currentUser={true} key={key}>
+                    {message.message}
+                  </Message>
+                ) : (
+                  <Fragment key={key}>
+                    {/* don't show username if previous message was sent by the same user */}
+                    {(key === 0 ||
+                      allMessages[key - 1].username !== message.username) && (
+                      <Name>{message.username}</Name>
+                    )}
+                    <Message>{message.message}</Message>
+                  </Fragment>
+                )
+              ) : message.status === "join" ? (
+                <JoinChat key={key}>{message.username}</JoinChat>
               ) : (
-                <Fragment key={key}>
-                  {/* don't show username if previous message was sent by the same user */}
-                  {(key === 0 ||
-                    allMessages[key - 1].username !== message.username) && (
-                    <Name>{message.username}</Name>
-                  )}
-                  <Message>{message.message}</Message>
-                </Fragment>
+                <LeftChat key={key}>{message.username}</LeftChat>
               );
             })}
           </Chat>
