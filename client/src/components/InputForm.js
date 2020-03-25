@@ -16,7 +16,7 @@ const Form = styled.form`
   width: 100%;
   display: block;
   padding: 12px 18px;
-  background-color: #fff;
+  background-color: ${props => props.theme.secondaryBgColor};
   box-shadow: 0px 3px 10px rgba(68, 68, 68, 0.08);
   border-radius: 16px;
 `;
@@ -28,13 +28,13 @@ const TextArea = styled(TextareaAutosize)`
   background: transparent;
   border: none;
   outline: none;
-  color: #000;
+  color: ${props => props.theme.color};
   font-family: ${props => props.theme.font};
   font-size: 15px;
   line-height: 155%;
   resize: none;
   &::placeholder {
-    color: rgba(0, 0, 0, 0.3);
+    color: ${props => props.theme.color}4D;
   }
 `;
 

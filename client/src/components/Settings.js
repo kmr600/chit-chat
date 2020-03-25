@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Checkbox from "./Checkbox";
+import { setTheme } from "../actions/settings";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,22 +35,36 @@ const Label = styled.label`
 const Span = styled.span`
   margin-left: 22px;
   font-size: 18px;
+  &::selection {
+    background: none;
+  }
 `;
 
 const Settings = () => {
   // Redux
-  // const {darkMode, background} = useSelector(state => state.settings)
+  const { theme } = useSelector(state => state.settings);
+  const dispatch = useDispatch();
+  const setThemeAction = useCallback(
+    payload => {
+      dispatch(setTheme(payload));
+    },
+    [dispatch]
+  );
 
-  const [settings, setSettings] = useState({
-    darkMode: false,
+  const [data, setData] = useState({
+    darkMode: theme === "dark" ? true : false,
     background: false
   });
 
-  const { darkMode, background } = settings;
+  const { darkMode, background } = data;
 
   const handleChange = e => {
-    setSettings({ ...settings, [e.target.name]: e.target.checked });
+    setData({ ...data, [e.target.name]: e.target.checked });
   };
+
+  useEffect(() => {
+    darkMode ? setThemeAction("dark") : setThemeAction("light");
+  }, [darkMode]);
 
   return (
     <Wrapper>

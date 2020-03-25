@@ -9,7 +9,7 @@ import { toggleMenu } from "../actions/menu";
 const Wrapper = styled.div`
   padding: 25px;
   width: 100%;
-  background: #ffffff;
+  background: ${props => props.theme.secondaryBgColor};
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `;
 

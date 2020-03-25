@@ -9,8 +9,7 @@ import Home from "./routes/Home";
 import Chatroom from "./routes/Chatroom";
 import LoadingScreen from "./components/LoadingScreen";
 // Redux
-import { Provider } from "react-redux";
-import store from "./store";
+import { useSelector } from "react-redux";
 
 const lightTheme = () => ({
   ...themes["common"],
@@ -23,36 +22,33 @@ const darkTheme = () => ({
 });
 
 const App = () => {
-  // get theme from local storage
-  const [defaultTheme, setDefaultTheme] = useState(
-    localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
-  );
-  // set current theme to defaulted theme
+  // Redux
+  const { theme } = useSelector(state => state.settings);
+
+  // set current theme
   const [currentTheme, setCurrentTheme] = useState(
-    defaultTheme === "dark" ? darkTheme() : lightTheme()
+    theme === "dark" ? darkTheme() : lightTheme()
   );
   // save theme in local storage
   useEffect(() => {
-    if (currentTheme) localStorage.setItem("theme", currentTheme.type);
-  }, [currentTheme]);
+    setCurrentTheme(theme === "dark" ? darkTheme() : lightTheme());
+  }, [theme]);
 
   return (
-    <Provider store={store}>
-      <SocketIOProvider url="http://localhost:5000">
-        <ThemeProvider theme={currentTheme}>
-          <GlobalStyle />
+    <SocketIOProvider url="http://localhost:5000">
+      <ThemeProvider theme={currentTheme}>
+        <GlobalStyle />
 
-          <LoadingScreen />
+        <LoadingScreen />
 
-          <Router>
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <PrivateRoute exact path="/chat" component={Chatroom} />
-            </Switch>
-          </Router>
-        </ThemeProvider>
-      </SocketIOProvider>
-    </Provider>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <PrivateRoute exact path="/chat" component={Chatroom} />
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </SocketIOProvider>
   );
 };
 

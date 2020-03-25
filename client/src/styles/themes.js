@@ -8,14 +8,15 @@ export const themes = {
   },
   light: {
     type: "light",
-    // bgColor: "#FFFFFF",
     bgColor: "#F1F3F6",
+    secondaryBgColor: "#FFFFFF",
     color: "#111111",
     bodyColor: "#333333"
   },
   dark: {
     type: "dark",
-    bgColor: "#282A36",
+    bgColor: "#0C0D10",
+    secondaryBgColor: "#282A36",
     color: "#FFFFFF",
     bodyColor: "#EAEAEA"
   }

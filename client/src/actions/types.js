@@ -11,3 +11,6 @@ export const NEW_MESSAGE = "NEW_MESSAGE";
 // Menu
 export const TOGGLE_MENU = "TOGGLE_MENU";
 export const SET_MENU_IS_OPEN = "SET_MENU_IS_OPEN";
+
+// Settings
+export const SET_THEME = "SET_THEME";

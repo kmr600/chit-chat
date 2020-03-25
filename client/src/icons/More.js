@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Svg = styled.svg`
   width: 27px;
   height: 27px;
-  fill: #000;
+  fill: ${props => props.theme.color};
   stroke-width: 1.5;
 `;
 

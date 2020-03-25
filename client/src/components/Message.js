@@ -7,8 +7,9 @@ const Wrapper = styled.div`
   align-self: ${props => props.currentUser && "flex-end"};
   border-radius: ${props =>
     props.currentUser ? "16px 16px 0px 16px" : "0px 16px 16px 16px"};
-  background: ${props => (props.currentUser ? props.theme.purple : "#FFF")};
-  color: ${props => (props.currentUser ? "#FFF" : "#000")};
+  background: ${props =>
+    props.currentUser ? props.theme.purple : props.theme.secondaryBgColor};
+  color: ${props => (props.currentUser ? "#FFF" : props.theme.color)};
   margin-bottom: 14px;
   display: inline-block;
   padding: 12px 18px;

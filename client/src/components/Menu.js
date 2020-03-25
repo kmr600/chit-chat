@@ -7,31 +7,30 @@ import Users from "../components/Users";
 import Settings from "../components/Settings";
 import { setMenuIsOpen } from "../actions/menu";
 
-const BurgerMenuStyles = {
-  bmMenuWrap: {
-    position: "fixed",
-    height: "100%",
-    boxShadow: "1px 0px 7px 0px #aaaaaa"
-    // boxShadow: "0px 2px 4px rgba(0,0,0,0.1)"
-  },
-  bmMenu: {
-    background: "#fff",
-    padding: "70px"
-  },
-  bmItemList: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  bmItem: {
-    display: "block",
-    outline: "none"
-  },
-  bmOverlay: {
-    background: "transparent",
-    cursor: "pointer"
+const StyledBurgerMenu = styled(BurgerMenu)`
+  .bm-menu-wrap {
+    position: fixed;
+    height: 100%;
+    box-shadow: 1px 0px 7px 0px #aaaaaa;
   }
-};
+  .bm-menu {
+    background: ${props => props.theme.secondaryBgColor};
+    padding: 70px;
+  }
+  .bm-item-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bm-item {
+    display: block;
+    outline: none;
+  }
+  .bm-overlay {
+    background: transparent;
+    cursor: pointer;
+  }
+`;
 
 const Title = styled.h3`
   font-size: 36px;
@@ -63,7 +62,7 @@ const StyledTab = styled(Tab)`
   outline: none;
   user-select: none;
   &.selected {
-    color: ${props => (props.theme.type === "light" ? "#fff" : "#000")};
+    color: #fff;
     background-color: ${props => props.theme.purple};
   }
 `;
@@ -87,12 +86,11 @@ const Menu = () => {
   );
 
   return (
-    <BurgerMenu
+    <StyledBurgerMenu
       right
       disableAutoFocus
       onStateChange={state => setMenuIsOpenAction(state.isOpen)}
       isOpen={isOpen}
-      styles={BurgerMenuStyles}
       width={"60vw"}
       pageWrapId={"page-wrap"}
       outerContainerId={"outer-container"}
@@ -119,7 +117,7 @@ const Menu = () => {
           <Settings />
         </StyledTabPanel>
       </StyledTabs>
-    </BurgerMenu>
+    </StyledBurgerMenu>
   );
 };
 

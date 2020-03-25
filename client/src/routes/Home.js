@@ -39,15 +39,15 @@ const Input = styled.input`
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid ${props => props.theme.color};
   outline: none;
-  color: #000;
+  color: ${props => props.theme.color};
   font-family: ${props => props.theme.font};
   font-size: 15px;
   line-height: 155%;
   resize: none;
   &::placeholder {
-    color: rgba(0, 0, 0, 0.3);
+    color: ${props => props.theme.color}4D;
   }
 `;
 

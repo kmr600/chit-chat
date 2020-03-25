@@ -6,7 +6,8 @@ const Wrapper = styled.div`
   margin-top: 12px;
   margin-bottom: 14px;
   display: inline-block;
-  color: #444444;
+  color: ${props =>
+    props.theme.type === "light" ? "#444444" : props.theme.color};
   font-size: 15px;
   word-break: break-word;
 `;
