@@ -8,7 +8,6 @@ import Users from "../components/Users";
 import Settings from "../components/Settings";
 import LogOut from "../icons/LogOut";
 import { chatLeave } from "../actions/auth";
-import { newMessage } from "../actions/chat";
 import { setMenuIsOpen } from "../actions/menu";
 
 const StyledBurgerMenu = styled(BurgerMenu)`
@@ -104,12 +103,6 @@ const Menu = () => {
   const chatLeaveAction = useCallback(() => {
     dispatch(chatLeave());
   }, [dispatch]);
-  const newMessageAction = useCallback(
-    payload => {
-      dispatch(newMessage(payload));
-    },
-    [dispatch]
-  );
 
   // logout when leaving chat, and emit an event for others to see who left
   const handleLeave = () => {

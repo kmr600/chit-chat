@@ -8,6 +8,7 @@ import {
   chatJoinFail,
   chatJoinLoading
 } from "../actions/auth";
+import { loadUsers } from "../actions/chat";
 import Container from "../components/Container";
 
 const Wrapper = styled.div`
@@ -91,6 +92,12 @@ const Home = () => {
   const loadingAction = useCallback(() => {
     dispatch(chatJoinLoading());
   }, [dispatch]);
+  const loadUsersAction = useCallback(
+    payload => {
+      dispatch(loadUsers(payload));
+    },
+    [dispatch]
+  );
 
   const [error, setError] = useState("");
 
@@ -117,7 +124,7 @@ const Home = () => {
     socket.emit("join", data);
   };
 
-  const { socket } = useSocket("join", ({ user, error }) => {
+  const { socket } = useSocket("join", ({ users, user, error }) => {
     if (error) {
       chatJoinFailAction();
       setError(error);
@@ -125,6 +132,9 @@ const Home = () => {
     }
 
     chatJoinSuccessAction(user);
+
+    // load list of users from the backend
+    loadUsersAction(users);
   });
 
   return isAuthenticated ? (

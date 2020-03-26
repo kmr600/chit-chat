@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 import More from "../icons/More";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Headroom from "react-headroom";
 import { toggleMenu } from "../actions/menu";
 
@@ -51,6 +51,7 @@ const OnlineText = styled.p`
 
 const Header = () => {
   // Redux
+  const { users } = useSelector(state => state.chat);
   const dispatch = useDispatch();
   const toggleMenuAction = useCallback(() => {
     dispatch(toggleMenu());
@@ -69,7 +70,7 @@ const Header = () => {
             </Title>
             <OnlineWrapper>
               <OnlineCircle />
-              <OnlineText>{"<number>"} online</OnlineText>
+              <OnlineText>{users.length} online</OnlineText>
             </OnlineWrapper>
           </TitleWrapper>
 

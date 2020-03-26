@@ -58,7 +58,7 @@ module.exports = server => {
         console.log("A user joined chat");
       }
 
-      io.emit("join", { error, user });
+      io.emit("join", { users, error, user });
     });
 
     // Send/receive messages
@@ -71,7 +71,7 @@ module.exports = server => {
       const user = removeUser(socket.id);
 
       if (user) {
-        io.emit("leave", { username: socket.username });
+        io.emit("leave", { users, username: socket.username });
       }
 
       console.log("A user left chat");
@@ -82,7 +82,7 @@ module.exports = server => {
       const user = removeUser(socket.id);
 
       if (user) {
-        io.emit("leave", { username: socket.username });
+        io.emit("leave", { users, username: socket.username });
       }
       console.log("A user disconnected");
     });

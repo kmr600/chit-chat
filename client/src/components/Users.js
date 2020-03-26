@@ -48,22 +48,18 @@ const Users = () => {
   // Redux
   const { users } = useSelector(state => state.chat);
 
-  let testUsers = [];
-  const testUsersToReturn = () => {
-    for (let i = 0; i < 12; i++) {
-      testUsers.push(<User key={i}>username</User>);
-    }
-    return testUsers;
-  };
-
   return (
     <Wrapper>
       <OnlineWrapper>
         <OnlineCircle />
-        <OnlineText>{"<number>"} online</OnlineText>
+        <OnlineText>{users.length} online</OnlineText>
       </OnlineWrapper>
 
-      <List>{testUsersToReturn()}</List>
+      <List>
+        {users.map(user => (
+          <User key={user}>{user}</User>
+        ))}
+      </List>
     </Wrapper>
   );
 };
