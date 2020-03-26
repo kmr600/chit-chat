@@ -11,6 +11,7 @@ import { chatLeave } from "../actions/auth";
 import { clearUsers, clearMessages } from "../actions/chat";
 import { resetMenu } from "../actions/menu";
 import { setMenuIsOpen } from "../actions/menu";
+import useWindowSize from "../utils/useWindowSize";
 
 const StyledBurgerMenu = styled(BurgerMenu)`
   .bm-menu-wrap {
@@ -22,6 +23,9 @@ const StyledBurgerMenu = styled(BurgerMenu)`
     background: ${props => props.theme.secondaryBgColor};
     padding: 70px;
     min-height: 100%;
+    @media (max-width: 425px) {
+      padding: 60px 50px;
+    }
   }
   .bm-item-list {
     display: flex;
@@ -41,6 +45,12 @@ const StyledBurgerMenu = styled(BurgerMenu)`
 const Title = styled.h3`
   font-size: 36px;
   word-break: break-word;
+  text-align: center;
+  line-height: 125%;
+  @media (max-width: 425px) {
+    font-size: 25px;
+    line-height: 155%;
+  }
 `;
 
 const LeaveChat = styled.button`
@@ -82,6 +92,16 @@ const StyledTab = styled(Tab)`
   &.selected {
     color: #fff;
     background-color: ${props => props.theme.purple};
+  }
+  @media (max-width: 768px) {
+    font-size: 15px;
+    margin: 0 8px;
+    padding: 12px 28px;
+  }
+  @media (max-width: 425px) {
+    font-size: 15px;
+    margin: 0 8px;
+    padding: 12px 28px;
   }
 `;
 
@@ -128,13 +148,15 @@ const Menu = () => {
 
   const { socket } = useSocket();
 
+  const size = useWindowSize();
+
   return (
     <StyledBurgerMenu
       right
       disableAutoFocus
       onStateChange={state => setMenuIsOpenAction(state.isOpen)}
       isOpen={isOpen}
-      width={"60vw"}
+      width={size.width <= 425 ? "80vw" : "60vw"}
       pageWrapId={"page-wrap"}
       outerContainerId={"outer-container"}
       customBurgerIcon={false}

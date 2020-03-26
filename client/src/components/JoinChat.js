@@ -9,6 +9,7 @@ const Wrapper = styled.div`
   color: ${props => props.theme.subColor};
   font-size: 13px;
   word-break: break-word;
+  line-height: 155%;
 `;
 
 const JoinChat = ({ children }) => {

@@ -10,6 +10,7 @@ const Wrapper = styled.div`
     props.theme.type === "light" ? "#444444" : props.theme.color};
   font-size: 15px;
   word-break: break-word;
+  line-height: 155%;
 `;
 
 const Name = ({ children, host }) => {

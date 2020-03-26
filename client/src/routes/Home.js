@@ -47,8 +47,12 @@ const Input = styled.input`
   font-size: 15px;
   line-height: 155%;
   resize: none;
+  text-align: center;
   &::placeholder {
     color: ${props => props.theme.color}4D;
+  }
+  @media (max-width: 425px) {
+    font-size: 18px;
   }
 `;
 

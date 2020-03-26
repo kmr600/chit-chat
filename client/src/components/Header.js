@@ -6,7 +6,7 @@ import Headroom from "react-headroom";
 import { toggleMenu } from "../actions/menu";
 
 const Wrapper = styled.div`
-  padding: 25px;
+  padding: 25px 0;
   width: 100%;
   background: ${props => props.theme.secondaryBgColor};
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -18,6 +18,13 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  padding: 0 30px;
+  @media (max-width: 768px) {
+    padding: 0 60px;
+  }
+  @media (max-width: 425px) {
+    padding: 0 30px;
+  }
 `;
 
 const TitleWrapper = styled.div`

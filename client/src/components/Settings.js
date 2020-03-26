@@ -38,6 +38,10 @@ const Span = styled.span`
   &::selection {
     background: none;
   }
+  @media (max-width: 425px) {
+    margin-left: 18px;
+    font-size: 15px;
+  }
 `;
 
 const Settings = () => {
