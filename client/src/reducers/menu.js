@@ -1,4 +1,4 @@
-import { TOGGLE_MENU, SET_MENU_IS_OPEN } from "../actions/types";
+import { TOGGLE_MENU, SET_MENU_IS_OPEN, RESET_MENU } from "../actions/types";
 
 const intialState = {
   isOpen: false,
@@ -19,6 +19,12 @@ export default function(state = intialState, action) {
       return {
         ...state,
         isOpen: payload
+      };
+    case RESET_MENU:
+      return {
+        ...state,
+        isOpen: false,
+        shouldBeOpen: false
       };
     default:
       return state;

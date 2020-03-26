@@ -2,10 +2,13 @@ import {
   LOAD_USERS,
   ADD_USER,
   REMOVE_USER,
+  CLEAR_USERS,
   SEND_MESSAGE,
-  NEW_MESSAGE
+  NEW_MESSAGE,
+  CLEAR_MESSAGES
 } from "./types";
 
+// Load updated user list from backend
 export const loadUsers = users => dispatch => {
   dispatch({
     type: LOAD_USERS,
@@ -29,6 +32,13 @@ export const removeUser = username => dispatch => {
   });
 };
 
+// Clear users from state, such as when logging out
+export const clearUsers = () => dispatch => {
+  dispatch({
+    type: CLEAR_USERS
+  });
+};
+
 // Add message to only to the sender's chatroom
 export const sendMessage = data => dispatch => {
   dispatch({
@@ -42,5 +52,12 @@ export const newMessage = data => dispatch => {
   dispatch({
     type: NEW_MESSAGE,
     payload: data
+  });
+};
+
+// Clear messages from state, such as when logging out
+export const clearMessages = () => dispatch => {
+  dispatch({
+    type: CLEAR_MESSAGES
   });
 };

@@ -8,6 +8,8 @@ import Users from "../components/Users";
 import Settings from "../components/Settings";
 import LogOut from "../icons/LogOut";
 import { chatLeave } from "../actions/auth";
+import { clearUsers, clearMessages } from "../actions/chat";
+import { resetMenu } from "../actions/menu";
 import { setMenuIsOpen } from "../actions/menu";
 
 const StyledBurgerMenu = styled(BurgerMenu)`
@@ -103,11 +105,25 @@ const Menu = () => {
   const chatLeaveAction = useCallback(() => {
     dispatch(chatLeave());
   }, [dispatch]);
+  const clearUsersAction = useCallback(() => {
+    dispatch(clearUsers());
+  }, [dispatch]);
+  const clearMessagesAction = useCallback(() => {
+    dispatch(clearMessages());
+  }, [dispatch]);
+  const resetMenuAction = useCallback(() => {
+    dispatch(resetMenu());
+  }, [dispatch]);
 
   // logout when leaving chat, and emit an event for others to see who left
   const handleLeave = () => {
     socket.emit("leave");
     chatLeaveAction();
+
+    // clear data from state
+    clearUsersAction();
+    clearMessagesAction();
+    resetMenuAction();
   };
 
   const { socket } = useSocket();

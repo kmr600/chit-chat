@@ -8,14 +8,17 @@ export const CHAT_LEAVE = "CHAT_LEAVE";
 export const LOAD_USERS = "LOAD_USERS";
 export const ADD_USER = "ADD_USER";
 export const REMOVE_USER = "REMOVE_USER";
+export const CLEAR_USERS = "CLEAR_USERS";
 
 // Messages
 export const SEND_MESSAGE = "SEND_MESSAGE";
 export const NEW_MESSAGE = "NEW_MESSAGE";
+export const CLEAR_MESSAGES = "CLEAR_MESSAGES";
 
 // Menu
 export const TOGGLE_MENU = "TOGGLE_MENU";
 export const SET_MENU_IS_OPEN = "SET_MENU_IS_OPEN";
+export const RESET_MENU = "RESET_MENU";
 
 // Settings
 export const SET_THEME = "SET_THEME";

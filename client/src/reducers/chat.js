@@ -2,8 +2,10 @@ import {
   LOAD_USERS,
   ADD_USER,
   REMOVE_USER,
+  CLEAR_USERS,
   SEND_MESSAGE,
-  NEW_MESSAGE
+  NEW_MESSAGE,
+  CLEAR_MESSAGES
 } from "../actions/types";
 
 const intialState = {
@@ -32,6 +34,11 @@ export default function(state = intialState, action) {
         ...state,
         users: state.users.filter(user => user !== payload)
       };
+    case CLEAR_USERS:
+      return {
+        ...state,
+        users: []
+      };
     case SEND_MESSAGE:
     case NEW_MESSAGE:
       return {
@@ -39,6 +46,11 @@ export default function(state = intialState, action) {
         messages: [...state.messages, payload],
         error: false,
         loading: false
+      };
+    case CLEAR_MESSAGES:
+      return {
+        ...state,
+        messages: []
       };
     default:
       return state;
