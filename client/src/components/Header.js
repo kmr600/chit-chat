@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import styled from "styled-components";
 import More from "../icons/More";
 import { useDispatch } from "react-redux";
+import Headroom from "react-headroom";
 import { toggleMenu } from "../actions/menu";
 
 const Wrapper = styled.div`
@@ -56,26 +57,28 @@ const Header = () => {
   }, [dispatch]);
 
   return (
-    <Wrapper>
-      <Container>
-        <TitleWrapper>
-          <Title>
-            <span role="img" aria-label="logo">
-              💬
-            </span>
-            &nbsp;Chat
-          </Title>
-          <OnlineWrapper>
-            <OnlineCircle />
-            <OnlineText>{"<number>"} online</OnlineText>
-          </OnlineWrapper>
-        </TitleWrapper>
+    <Headroom>
+      <Wrapper>
+        <Container>
+          <TitleWrapper>
+            <Title>
+              <span role="img" aria-label="logo">
+                💬
+              </span>
+              &nbsp;Chat
+            </Title>
+            <OnlineWrapper>
+              <OnlineCircle />
+              <OnlineText>{"<number>"} online</OnlineText>
+            </OnlineWrapper>
+          </TitleWrapper>
 
-        <button onClick={() => toggleMenuAction()}>
-          <More />
-        </button>
-      </Container>
-    </Wrapper>
+          <button onClick={() => toggleMenuAction()}>
+            <More />
+          </button>
+        </Container>
+      </Wrapper>
+    </Headroom>
   );
 };
 
