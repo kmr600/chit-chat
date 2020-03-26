@@ -19,6 +19,16 @@ const Chat = styled.div`
   align-items: flex-start;
 `;
 
+const StartConversation = styled.p`
+  margin-top: 12px;
+  margin-bottom: 14px;
+  display: inline-block;
+  color: ${props => props.theme.subColor};
+  font-size: 13px;
+  word-break: break-word;
+  line-height: 155%;
+`;
+
 const Chatroom = () => {
   // Redux
   const { user } = useSelector(state => state.auth);
@@ -84,27 +94,11 @@ const Chatroom = () => {
 
         <Container>
           <Chat>
-            <Name host={true}>Kyle</Name>
-            <Message>👋 Good evening, chat!</Message>
-            <Message>
-              Tonight we are building a chat app. Should be lots of fun! Tonight
-              we are building a chat app. Should be lots of fun! Tonight we are
-              building a chat app. Should be lots of fun! Tonight we are
-              building a chat app. Should be lots of fun!
-            </Message>
-
-            <Name>zoubizoub</Name>
-            <Message>I'm addicted to Overwatch...</Message>
-
-            <Name>YorgYetson</Name>
-            <Message>Bro, you have a problem...</Message>
-
-            <Name>furnicarul069</Name>
-            <Message>😂😂😂</Message>
-
-            <Message currentUser={true}>C'mon guys, stay focused.</Message>
-
-            <LeftChat>simon2610</LeftChat>
+            {messages.length === 0 && (
+              <StartConversation>
+                Send a message to start a conversation
+              </StartConversation>
+            )}
 
             {messages.map((message, key, allMessages) => {
               return message.message ? (
