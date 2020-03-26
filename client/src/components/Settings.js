@@ -52,11 +52,10 @@ const Settings = () => {
   );
 
   const [data, setData] = useState({
-    darkMode: theme === "dark" ? true : false,
-    background: false
+    darkMode: theme === "dark" ? true : false
   });
 
-  const { darkMode, background } = data;
+  const { darkMode } = data;
 
   const handleChange = e => {
     setData({ ...data, [e.target.name]: e.target.checked });
@@ -77,16 +76,6 @@ const Settings = () => {
               onChange={e => handleChange(e)}
             />
             <Span>Dark mode</Span>
-          </Label>
-        </Field>
-        <Field>
-          <Label>
-            <Checkbox
-              name="background"
-              checked={background}
-              onChange={e => handleChange(e)}
-            />
-            <Span>Background</Span>
           </Label>
         </Field>
       </List>
