@@ -63,12 +63,15 @@ const Chatroom = () => {
     newMessageAction(data);
   });
 
-  useSocket("join", ({ users, user: { username } }) => {
+  useSocket("join", ({ users, error, user }) => {
+    // handle any errors if new users try to join
+    if (error) return;
+
     // Add message to show that a user has joined the chat
-    newMessageAction({ username, status: "join" });
+    newMessageAction({ username: user.username, status: "join" });
 
     // Add newly joined user to user list
-    addUserAction(username);
+    addUserAction(user.username);
 
     // Load list of users from the backend
     loadUsersAction(users);

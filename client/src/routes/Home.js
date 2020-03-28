@@ -135,13 +135,16 @@ const Home = () => {
       return;
     }
 
+    // clear any previous errors
+    setError(null);
+
     chatJoinSuccessAction(user);
 
     // load list of users from the backend
     loadUsersAction(users);
   });
 
-  return isAuthenticated ? (
+  return isAuthenticated && !error ? (
     <Redirect to="/chat" />
   ) : (
     <Container>
