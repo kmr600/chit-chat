@@ -1,6 +1,7 @@
-import React, { Fragment, useCallback } from "react";
+import React, { Fragment, useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import { useSocket } from "use-socketio";
+import VisibilitySensor from "react-visibility-sensor";
 import Menu from "../components/Menu";
 import Header from "../components/Header";
 import Container from "../components/Container";
@@ -29,7 +30,22 @@ const StartConversation = styled.p`
   line-height: 155%;
 `;
 
+const ScrollToBottom = styled.button`
+  padding: 18px 36px;
+  background-color: ${props => props.theme.color};
+  color: ${props => props.theme.bgColor};
+  box-shadow: 0px 3px 10px rgba(68, 68, 68, 0.08);
+  border-radius: 60px;
+  position: fixed;
+  top: 11%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+`;
+
 const Chatroom = () => {
+  const inputForm = useRef(null);
+
   // Redux
   const { user } = useSelector(state => state.auth);
   const { messages } = useSelector(state => state.chat);
@@ -88,12 +104,24 @@ const Chatroom = () => {
     loadUsersAction(users);
   });
 
+  const scrollToBottom = () => {
+    inputForm.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const [inputInView, setInputInView] = useState(true);
+
   return (
     <div id="outer-container">
       <Menu />
 
       <div id="page-wrap">
         <Header />
+
+        {!inputInView && (
+          <ScrollToBottom onClick={() => scrollToBottom()}>
+            Scroll to bottom
+          </ScrollToBottom>
+        )}
 
         <Container>
           <Chat>
@@ -127,7 +155,12 @@ const Chatroom = () => {
             })}
           </Chat>
 
-          <InputForm />
+          <VisibilitySensor onChange={isVisible => setInputInView(isVisible)}>
+            <>
+              <InputForm />
+              <div ref={inputForm} />
+            </>
+          </VisibilitySensor>
         </Container>
       </div>
     </div>
