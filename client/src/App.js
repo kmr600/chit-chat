@@ -35,7 +35,7 @@ const App = () => {
   }, [theme]);
 
   return (
-    <SocketIOProvider url="http://localhost:5000">
+    <SocketIOProvider url="/">
       <ThemeProvider theme={currentTheme}>
         <GlobalStyle />
 
