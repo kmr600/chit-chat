@@ -3,12 +3,12 @@ const SocketIO = require("socket.io");
 // store all users
 let users = [];
 // define user limit
-const userLimit = 1;
+const userLimit = 100;
 
 const addUser = ({ id, username }) => {
   try {
     // Check if chatroom is full
-    if (users.length > userLimit) {
+    if (users.length === userLimit || users.length > userLimit) {
       return { error: "Chatroom is full. Please come back later." };
     }
 
