@@ -10,9 +10,15 @@ import { sendMessage } from "../actions/chat";
 
 const filter = new Filter();
 
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`;
+
 const Form = styled.form`
   position: relative;
-  margin-top: 28px;
   width: 100%;
   display: block;
   padding: 12px 18px;
@@ -53,6 +59,17 @@ const Button = styled.button`
   svg {
     stroke: #fff;
   }
+`;
+
+const CharacterLimit = styled.p`
+  margin-top: 12px;
+  margin-bottom: 14px;
+  margin-left: auto;
+  display: inline-block;
+  color: ${props => props.theme.subColor};
+  font-size: 13px;
+  word-break: break-word;
+  line-height: 155%;
 `;
 
 const Input = () => {
@@ -112,23 +129,32 @@ const Input = () => {
     textarea.current.focus();
   };
 
+  const messageLimit = 240;
+
   const { socket } = useSocket("sendMessage");
 
   return (
-    <Form onSubmit={e => handleSubmit(e)}>
-      <TextArea
-        name="message"
-        value={message}
-        placeholder="Say something..."
-        onChange={e => handleChange(e)}
-        ref={textarea}
-        onKeyPress={e => e.key === "Enter" && handleSubmit(e)}
-      />
+    <Wrapper>
+      <CharacterLimit>
+        {message.length} / {messageLimit}
+      </CharacterLimit>
 
-      <Button type="submit">
-        <ArrowUp />
-      </Button>
-    </Form>
+      <Form onSubmit={e => handleSubmit(e)}>
+        <TextArea
+          name="message"
+          value={message}
+          placeholder="Say something..."
+          onChange={e => handleChange(e)}
+          ref={textarea}
+          onKeyPress={e => e.key === "Enter" && handleSubmit(e)}
+          maxLength={240}
+        />
+
+        <Button type="submit">
+          <ArrowUp />
+        </Button>
+      </Form>
+    </Wrapper>
   );
 };
 

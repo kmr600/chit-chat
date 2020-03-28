@@ -34,8 +34,11 @@ const App = () => {
     setCurrentTheme(theme === "dark" ? darkTheme() : lightTheme());
   }, [theme]);
 
+  const socketUrl =
+    process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000";
+
   return (
-    <SocketIOProvider url="/">
+    <SocketIOProvider url={socketUrl}>
       <ThemeProvider theme={currentTheme}>
         <GlobalStyle />
 
