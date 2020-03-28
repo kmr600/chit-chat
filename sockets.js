@@ -2,8 +2,10 @@ const SocketIO = require("socket.io");
 
 // store all users
 let users = [];
-// define user limit
+// define limits
 const userLimit = 100;
+const usernameLimit = 16;
+const messageLimit = 240;
 
 const addUser = ({ id, username }) => {
   try {
@@ -19,6 +21,13 @@ const addUser = ({ id, username }) => {
 
     // Clean the data
     username = username.trim().toLowerCase();
+
+    // Check username length
+    if (username.length === 0 || username.length > usernameLimit) {
+      return {
+        error: `Username cannot be more than ${usernameLimit} characters.`
+      };
+    }
 
     // Check if a user has this username
     const existingUser = users.find(user => user.username === username);
@@ -70,6 +79,15 @@ module.exports = server => {
 
     // Send/receive messages
     socket.on("sendMessage", ({ username, message }) => {
+      // Clean the data
+      message = message.trim();
+
+      // Check message limit
+      if (message.length === 0 || message.length > messageLimit) {
+        const error = `Messages must between 1 and ${messageLimit} characters.`;
+        return io.to(`${socket.id}`).emit("messageError", error);
+      }
+
       socket.broadcast.emit("newMessage", { username, message });
     });
 

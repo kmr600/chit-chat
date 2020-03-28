@@ -168,6 +168,7 @@ const Home = () => {
             placeholder="Username"
             ref={input}
             autoComplete="off"
+            maxLength={16}
             required
           />
           <Button type="submit">Join</Button>
