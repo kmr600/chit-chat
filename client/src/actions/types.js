@@ -13,6 +13,7 @@ export const CLEAR_USERS = "CLEAR_USERS";
 // Messages
 export const SEND_MESSAGE = "SEND_MESSAGE";
 export const NEW_MESSAGE = "NEW_MESSAGE";
+export const SET_MESSAGE_ERROR = "SET_MESSAGE_ERROR";
 export const CLEAR_MESSAGES = "CLEAR_MESSAGES";
 
 // Menu

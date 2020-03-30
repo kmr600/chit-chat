@@ -5,6 +5,7 @@ import {
   CLEAR_USERS,
   SEND_MESSAGE,
   NEW_MESSAGE,
+  SET_MESSAGE_ERROR,
   CLEAR_MESSAGES
 } from "../actions/types";
 
@@ -44,6 +45,21 @@ export default function(state = intialState, action) {
       return {
         ...state,
         messages: [...state.messages, payload],
+        error: false,
+        loading: false
+      };
+    case SET_MESSAGE_ERROR:
+      return {
+        ...state,
+        messages: [
+          ...state.messages.slice(0, payload.index), // everything before current message
+          {
+            ...state.messages[payload.index],
+            error: true,
+            errorMessage: payload.error
+          },
+          ...state.messages.slice(payload.index + 1) // everything after current message
+        ],
         error: false,
         loading: false
       };

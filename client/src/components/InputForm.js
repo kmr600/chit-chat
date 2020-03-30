@@ -120,7 +120,12 @@ const Input = () => {
     const filteredMessage = filter.clean(message);
 
     // add message to chatroom
-    sendMessageAction({ ...data, message: filteredMessage });
+    sendMessageAction({
+      ...data,
+      message: filteredMessage,
+      error: false,
+      errorMessage: ""
+    });
     // send data to server for others to receive
     socket.emit("sendMessage", { ...data, message: filteredMessage });
     // clear input

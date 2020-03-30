@@ -1,4 +1,5 @@
 const SocketIO = require("socket.io");
+const { RateLimiterMemory } = require("rate-limiter-flexible");
 
 // store all users
 let users = [];
@@ -6,6 +7,11 @@ let users = [];
 const userLimit = 100;
 const usernameLimit = 16;
 const messageLimit = 240;
+
+const rateLimiter = new RateLimiterMemory({
+  points: 5, // 5 points
+  duration: 30 // per second
+});
 
 const addUser = ({ id, username }) => {
   try {
@@ -78,17 +84,29 @@ module.exports = server => {
     });
 
     // Send/receive messages
-    socket.on("sendMessage", ({ username, message }) => {
-      // Clean the data
-      message = message.trim();
+    socket.on("sendMessage", async ({ username, message }) => {
+      try {
+        // check if user has gone over rate limit. consume 1 point per event from IP
+        await rateLimiter.consume(socket.id);
 
-      // Check message limit
-      if (message.length === 0 || message.length > messageLimit) {
-        const error = `Messages must between 1 and ${messageLimit} characters.`;
-        return io.to(`${socket.id}`).emit("messageError", error);
+        // Clean the data
+        message = message.trim();
+
+        // Check message character limit
+        if (message.length === 0 || message.length > messageLimit) {
+          const error = `Messages must between 1 and ${messageLimit} characters.`;
+          return io.to(`${socket.id}`).emit("messageError", error);
+        }
+
+        socket.broadcast.emit("newMessage", { username, message });
+      } catch (err) {
+        // rate limit reached. no available points to consume
+        socket.emit("rateLimitReached", {
+          error: `Rate limit reached. Try again in ${Math.round(
+            err.msBeforeNext / 1000
+          )} seconds`
+        });
       }
-
-      socket.broadcast.emit("newMessage", { username, message });
     });
 
     // Remove user from chatroom on manual leave, such as clicking a button

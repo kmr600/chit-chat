@@ -11,7 +11,14 @@ import JoinChat from "../components/JoinChat";
 import LeftChat from "../components/LeftChat";
 import InputForm from "../components/InputForm";
 import { useSelector, useDispatch } from "react-redux";
-import { loadUsers, addUser, removeUser, newMessage } from "../actions/chat";
+import {
+  loadUsers,
+  addUser,
+  removeUser,
+  newMessage,
+  setMessageError
+} from "../actions/chat";
+import findLastIndex from "../utils/findLastIndex";
 
 const Chat = styled.div`
   width: 100%;
@@ -78,6 +85,12 @@ const Chatroom = () => {
     },
     [dispatch]
   );
+  const setMessageErrorAction = useCallback(
+    payload => {
+      dispatch(setMessageError(payload));
+    },
+    [dispatch]
+  );
 
   useSocket("newMessage", data => {
     newMessageAction(data);
@@ -106,6 +119,16 @@ const Chatroom = () => {
 
     // Load list of users from the backend
     loadUsersAction(users);
+  });
+
+  useSocket("rateLimitReached", ({ error }) => {
+    // get index of message so that an error can be applied
+    const indexOfNotDelivered = findLastIndex(
+      messages,
+      "username",
+      user.username
+    );
+    setMessageErrorAction({ index: indexOfNotDelivered, error });
   });
 
   const scrollToBottom = () => {
@@ -139,7 +162,12 @@ const Chatroom = () => {
             {messages.map((message, key, allMessages) => {
               return message.message ? (
                 message.username === user.username ? (
-                  <Message currentUser={true} key={key}>
+                  <Message
+                    currentUser={true}
+                    error={message.error ? true : false}
+                    errorMessage={message.error ? message.errorMessage : null}
+                    key={key}
+                  >
                     {message.message}
                   </Message>
                 ) : (

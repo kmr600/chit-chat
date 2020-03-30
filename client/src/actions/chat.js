@@ -5,6 +5,7 @@ import {
   CLEAR_USERS,
   SEND_MESSAGE,
   NEW_MESSAGE,
+  SET_MESSAGE_ERROR,
   CLEAR_MESSAGES
 } from "./types";
 
@@ -52,6 +53,14 @@ export const newMessage = data => dispatch => {
   dispatch({
     type: NEW_MESSAGE,
     payload: data
+  });
+};
+
+// Set error to a specific message
+export const setMessageError = ({ index, error }) => dispatch => {
+  dispatch({
+    type: SET_MESSAGE_ERROR,
+    payload: { index, error }
   });
 };
 
