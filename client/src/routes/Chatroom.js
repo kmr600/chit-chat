@@ -145,8 +145,12 @@ const Chatroom = () => {
                 ) : (
                   <Fragment key={key}>
                     {/* don't show username if previous message was sent by the same user */}
+                    {/* show username if previous message was a status message such as join or leave */}
                     {(key === 0 ||
-                      allMessages[key - 1].username !== message.username) && (
+                      allMessages[key - 1].username !== message.username ||
+                      (allMessages[key - 1].username === message.username &&
+                        (allMessages[key - 1].status === "join" ||
+                          allMessages[key - 1].status === "leave"))) && (
                       <Name>{message.username}</Name>
                     )}
                     <Message>{message.message}</Message>

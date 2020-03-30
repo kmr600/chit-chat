@@ -69,6 +69,21 @@ button {
     padding: 0;
   }
 }
+
+/*
+  iOS fixes:
+  "Font-size" fixes the issue with zoom in on iOS
+  "appearance" fixes box-shadow not showing on iOS
+*/
+@media (min-width: 320px) and (max-width: 1024px) {
+  textarea,
+  input,
+  label[for=file] {
+    font-size: 16px !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+}
 `;
 
 export default GlobalStyle;
