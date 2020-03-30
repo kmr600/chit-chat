@@ -32,15 +32,18 @@ const StartConversation = styled.p`
 
 const ScrollToBottom = styled.button`
   padding: 18px 36px;
-  background-color: ${props => props.theme.color};
+  background-color: ${props => props.theme.color}E6;
   color: ${props => props.theme.bgColor};
   box-shadow: 0px 3px 10px rgba(68, 68, 68, 0.08);
   border-radius: 60px;
   position: fixed;
-  top: 11%;
+  bottom: 11%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 900;
+  @media (max-width: 425px) {
+    font-size: 13px;
+  }
 `;
 
 const Chatroom = () => {
@@ -49,6 +52,7 @@ const Chatroom = () => {
   // Redux
   const { user } = useSelector(state => state.auth);
   const { messages } = useSelector(state => state.chat);
+  const { isOpen } = useSelector(state => state.menu);
   const dispatch = useDispatch();
   const loadUsersAction = useCallback(
     payload => {
@@ -105,10 +109,11 @@ const Chatroom = () => {
   });
 
   const scrollToBottom = () => {
-    inputForm.current.scrollIntoView({ behavior: "smooth" });
+    inputForm.current.scrollIntoView();
   };
 
   const [inputInView, setInputInView] = useState(true);
+  const [inputIsFocused, setInputIsFocused] = useState(false);
 
   return (
     <div id="outer-container">
@@ -117,7 +122,7 @@ const Chatroom = () => {
       <div id="page-wrap">
         <Header />
 
-        {!inputInView && (
+        {((!inputInView && !isOpen) || (inputIsFocused && !isOpen)) && (
           <ScrollToBottom onClick={() => scrollToBottom()}>
             Scroll to bottom
           </ScrollToBottom>
@@ -158,7 +163,11 @@ const Chatroom = () => {
           <VisibilitySensor onChange={isVisible => setInputInView(isVisible)}>
             <>
               <InputForm />
-              <div ref={inputForm} />
+              <div
+                ref={inputForm}
+                onFocus={() => setInputIsFocused(true)}
+                onBlur={() => setInputIsFocused(false)}
+              />
             </>
           </VisibilitySensor>
         </Container>
