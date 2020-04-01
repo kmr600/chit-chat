@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import AlertCircle from "../icons/AlertCircle";
+import { useSelector } from "react-redux";
 
 const Wrapper = styled.div`
   max-width: 100%;
@@ -40,11 +41,34 @@ const NotDelivered = styled.p`
   line-height: 155%;
 `;
 
+const Mention = styled.span`
+  background-color: ${props => props.theme.purple}DD;
+  color: #fff;
+  padding: 2px;
+  border-radius: 2px;
+`;
+
 const Message = ({ currentUser, error, errorMessage, children }) => {
+  // Redux
+  const { username } = useSelector(state => state.auth.user);
+
+  const regex = new RegExp("^@" + username + "$", "g");
+
   return (
     <Wrapper currentUser={currentUser}>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Bubble currentUser={currentUser}>{children}</Bubble>
+        <Bubble currentUser={currentUser}>
+          {children.split(" ").map((word, i) =>
+            word.match(regex) ? (
+              <>
+                <Mention key={i}>{word}</Mention>{" "}
+              </>
+            ) : (
+              <>{word} </>
+            )
+          )}
+        </Bubble>
+
         {error && (
           <span style={{ marginLeft: "8px" }}>
             <AlertCircle />
