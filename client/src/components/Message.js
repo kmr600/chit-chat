@@ -52,7 +52,7 @@ const Message = ({ currentUser, error, errorMessage, children }) => {
   // Redux
   const { username } = useSelector(state => state.auth.user);
 
-  const regex = new RegExp("^@" + username + "$", "i", "g");
+  const regex = new RegExp("^@" + username + "$", "gi");
 
   return (
     <Wrapper currentUser={currentUser}>
