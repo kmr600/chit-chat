@@ -52,7 +52,7 @@ const Message = ({ currentUser, error, errorMessage, children }) => {
   // Redux
   const { username } = useSelector(state => state.auth.user);
 
-  const regex = new RegExp("^@" + username + "$", "g");
+  const regex = new RegExp("^@" + username + "$", "i", "g");
 
   return (
     <Wrapper currentUser={currentUser}>
@@ -64,8 +64,8 @@ const Message = ({ currentUser, error, errorMessage, children }) => {
                 <Mention key={i}>{word}</Mention>{" "}
               </>
             ) : (
-              <>{word} </>
-            )
+                <>{word} </>
+              )
           )}
         </Bubble>
 
