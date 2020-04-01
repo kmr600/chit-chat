@@ -13,7 +13,14 @@ const Wrapper = styled.div`
   line-height: 155%;
 `;
 
-const Name = ({ children, host }) => {
+const Time = styled.span`
+  margin-left: 5px;
+  display: inline-block;
+  color: ${props => props.theme.subColor};
+  font-size: 12px;
+`;
+
+const Name = ({ children, time, host }) => {
   return (
     <Wrapper>
       {host && (
@@ -21,13 +28,14 @@ const Name = ({ children, host }) => {
           👑&nbsp;
         </span>
       )}
-      {children}
+      {children} {time && <Time>{time}</Time>}
     </Wrapper>
   );
 };
 
 Name.propTypes = {
   children: PropTypes.string.isRequired,
+  time: PropTypes.string.isRequired,
   host: PropTypes.bool
 };
 

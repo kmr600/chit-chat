@@ -179,7 +179,7 @@ const Chatroom = () => {
                       (allMessages[key - 1].username === message.username &&
                         (allMessages[key - 1].status === "join" ||
                           allMessages[key - 1].status === "leave"))) && (
-                      <Name>{message.username}</Name>
+                      <Name time={message.time}>{message.username}</Name>
                     )}
                     <Message>{message.message}</Message>
                   </Fragment>

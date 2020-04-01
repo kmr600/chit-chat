@@ -1,5 +1,6 @@
 const SocketIO = require("socket.io");
 const { RateLimiterMemory } = require("rate-limiter-flexible");
+const moment = require("moment");
 
 // store all users
 let users = [];
@@ -10,7 +11,7 @@ const messageLimit = 240;
 
 const rateLimiter = new RateLimiterMemory({
   points: 5, // 5 points
-  duration: 30 // per second
+  duration: 30 // seconds
 });
 
 const addUser = ({ id, username }) => {
@@ -98,7 +99,10 @@ module.exports = server => {
           return io.to(`${socket.id}`).emit("messageError", error);
         }
 
-        socket.broadcast.emit("newMessage", { username, message });
+        // Add timestamp
+        const time = moment().format("h:mm a");
+
+        socket.broadcast.emit("newMessage", { username, message, time });
       } catch (err) {
         // rate limit reached. no available points to consume
         socket.emit("rateLimitReached", {
