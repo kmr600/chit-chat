@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Redirect } from "react-router-dom";
 import styled from "styled-components";
 import { useSocket } from "use-socketio";
+import Filter from "bad-words";
 import { useSelector, useDispatch } from "react-redux";
 import {
   chatJoinSuccess,
@@ -10,6 +11,8 @@ import {
 } from "../actions/auth";
 import { loadUsers } from "../actions/chat";
 import Container from "../components/Container";
+
+const filter = new Filter();
 
 const Wrapper = styled.div`
   width: 100%;
@@ -120,6 +123,12 @@ const Home = () => {
 
     // check if username has content
     if (!username.length) return;
+
+    // cancel submission if username has profanity
+    if (filter.isProfane(username)) {
+      setError("Usernames cannot contain profanity.");
+      return;
+    }
 
     // set loading to true
     loadingAction();
