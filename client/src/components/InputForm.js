@@ -3,12 +3,20 @@ import styled from "styled-components";
 import { useSocket } from "use-socketio";
 import { useSelector } from "react-redux";
 import Filter from "bad-words";
+import UIfx from "uifx";
 import TextareaAutosize from "react-autosize-textarea";
 import ArrowUp from "../icons/ArrowUp";
+import profanityAudio from "../sounds/watch-your-profanity.mp3";
 import { useDispatch } from "react-redux";
 import { sendMessage } from "../actions/chat";
 
 const filter = new Filter();
+
+// sounds
+const profanity = new UIfx(profanityAudio, {
+  volume: 0.4,
+  throttleMs: 100
+});
 
 const Wrapper = styled.div`
   width: 100%;
@@ -118,6 +126,11 @@ const Input = () => {
 
     // filter out profanity
     const filteredMessage = filter.clean(message);
+
+    // if message has profanity, play audio
+    if (filter.isProfane(message)) {
+      profanity.play();
+    }
 
     // add message to chatroom
     sendMessageAction({

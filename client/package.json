@@ -21,6 +21,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.0.1",
+    "uifx": "^2.0.7",
     "use-socketio": "^2.0.0"
   },
   "scripts": {

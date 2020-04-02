@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import AlertCircle from "../icons/AlertCircle";
@@ -60,11 +60,11 @@ const Message = ({ currentUser, error, errorMessage, children }) => {
         <Bubble currentUser={currentUser}>
           {children.split(" ").map((word, i) =>
             word.match(regex) ? (
-              <>
-                <Mention key={i}>{word}</Mention>{" "}
-              </>
+              <Fragment key={i}>
+                <Mention>{word}</Mention>{" "}
+              </Fragment>
             ) : (
-              <>{word} </>
+              <Fragment key={i}>{word} </Fragment>
             )
           )}
         </Bubble>
