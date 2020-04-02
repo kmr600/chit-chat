@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 const List = styled.ul`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const Field = styled.li`
@@ -36,6 +36,7 @@ const Label = styled.label`
 const Span = styled.span`
   margin-left: 22px;
   font-size: 18px;
+  line-height: 135%;
   &::selection {
     background: none;
   }
@@ -49,6 +50,7 @@ const LeaveChat = styled.button`
   margin-top: 15px;
   color: #cc2e21;
   font-size: 15px;
+  line-height: 135%;
 `;
 
 const Settings = () => {
@@ -110,7 +112,7 @@ const Settings = () => {
             <Span>Sound Notifications</Span>
           </Label>
         </Field>
-        <Field>
+        <Field style={{ alignSelf: "center" }}>
           <Label>
             <LeaveChat onClick={() => clearMessagesAction()}>
               Clear chat messages
