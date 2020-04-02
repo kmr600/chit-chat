@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import Checkbox from "./Checkbox";
-import { setTheme } from "../actions/settings";
+import { setTheme, toggleSoundNotifications } from "../actions/settings";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -46,7 +46,7 @@ const Span = styled.span`
 
 const Settings = () => {
   // Redux
-  const { theme } = useSelector(state => state.settings);
+  const { theme, soundNotifications } = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const setThemeAction = useCallback(
     payload => {
@@ -54,12 +54,16 @@ const Settings = () => {
     },
     [dispatch]
   );
+  const toggleNotificationsAction = useCallback(() => {
+    dispatch(toggleSoundNotifications());
+  }, [dispatch]);
 
   const [data, setData] = useState({
-    darkMode: theme === "dark" ? true : false
+    darkMode: theme === "dark" ? true : false,
+    sound: soundNotifications
   });
 
-  const { darkMode } = data;
+  const { darkMode, sound } = data;
 
   const handleChange = e => {
     setData({ ...data, [e.target.name]: e.target.checked });
@@ -68,6 +72,10 @@ const Settings = () => {
   useEffect(() => {
     darkMode ? setThemeAction("dark") : setThemeAction("light");
   }, [darkMode]);
+
+  useEffect(() => {
+    setData({ ...data, sound: soundNotifications });
+  }, [soundNotifications]);
 
   return (
     <Wrapper>
@@ -80,6 +88,16 @@ const Settings = () => {
               onChange={e => handleChange(e)}
             />
             <Span>Dark mode</Span>
+          </Label>
+        </Field>
+        <Field>
+          <Label>
+            <Checkbox
+              name="sound"
+              checked={sound}
+              onChange={() => toggleNotificationsAction()}
+            />
+            <Span>Sound Notifications</Span>
           </Label>
         </Field>
       </List>

@@ -1,7 +1,10 @@
-import { SET_THEME } from "../actions/types";
+import { SET_THEME, TOGGLE_SOUND_NOTIFICATIONS } from "../actions/types";
 
 const intialState = {
-  theme: localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
+  theme: localStorage.getItem("theme")
+    ? localStorage.getItem("theme")
+    : "light",
+  soundNotifications: false
 };
 
 export default function(state = intialState, action) {
@@ -14,6 +17,11 @@ export default function(state = intialState, action) {
       return {
         ...state,
         theme: payload
+      };
+    case TOGGLE_SOUND_NOTIFICATIONS:
+      return {
+        ...state,
+        soundNotifications: !state.soundNotifications
       };
     default:
       return state;

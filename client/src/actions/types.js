@@ -23,3 +23,4 @@ export const RESET_MENU = "RESET_MENU";
 
 // Settings
 export const SET_THEME = "SET_THEME";
+export const TOGGLE_SOUND_NOTIFICATIONS = "TOGGLE_SOUND_NOTIFICATIONS";

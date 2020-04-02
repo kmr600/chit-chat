@@ -89,6 +89,7 @@ const Input = () => {
 
   // Redux
   const { user } = useSelector(state => state.auth);
+  const { soundNotifications } = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const sendMessageAction = useCallback(
     payload => {
@@ -128,7 +129,7 @@ const Input = () => {
     const filteredMessage = filter.clean(message);
 
     // if message has profanity, play audio
-    if (filter.isProfane(message)) {
+    if (filter.isProfane(message) && soundNotifications) {
       profanity.play();
     }
 

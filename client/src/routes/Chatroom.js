@@ -2,6 +2,7 @@ import React, { Fragment, useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import { useSocket } from "use-socketio";
 import VisibilitySensor from "react-visibility-sensor";
+import UIfx from "uifx";
 import Menu from "../components/Menu";
 import Header from "../components/Header";
 import Container from "../components/Container";
@@ -10,6 +11,7 @@ import Message from "../components/Message";
 import JoinChat from "../components/JoinChat";
 import LeftChat from "../components/LeftChat";
 import InputForm from "../components/InputForm";
+import allEyesAudio from "../sounds/all-eyes-on-me.mp3";
 import { useSelector, useDispatch } from "react-redux";
 import {
   loadUsers,
@@ -19,6 +21,12 @@ import {
   setMessageError
 } from "../actions/chat";
 import findLastIndex from "../utils/findLastIndex";
+
+// sounds
+const allEyes = new UIfx(allEyesAudio, {
+  volume: 1.0,
+  throttleMs: 100
+});
 
 const Chat = styled.div`
   width: 100%;
@@ -60,6 +68,7 @@ const Chatroom = () => {
   const { user } = useSelector(state => state.auth);
   const { messages } = useSelector(state => state.chat);
   const { isOpen } = useSelector(state => state.menu);
+  const { soundNotifications } = useSelector(state => state.settings);
   const dispatch = useDispatch();
   const loadUsersAction = useCallback(
     payload => {
@@ -94,6 +103,11 @@ const Chatroom = () => {
 
   useSocket("newMessage", data => {
     newMessageAction(data);
+
+    // if sounds notifications are on, play audio for incoming messages
+    if (soundNotifications) {
+      allEyes.play();
+    }
   });
 
   useSocket("join", ({ users, error, user }) => {
