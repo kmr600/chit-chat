@@ -64,7 +64,7 @@ export const setMessageError = ({ index, error }) => dispatch => {
   });
 };
 
-// Clear messages from state, such as when logging out
+// Clear messages from state, such as when logging out or clicking the button in settings
 export const clearMessages = () => dispatch => {
   dispatch({
     type: CLEAR_MESSAGES

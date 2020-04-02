@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import Checkbox from "./Checkbox";
 import { setTheme, toggleSoundNotifications } from "../actions/settings";
+import { clearMessages } from "../actions/chat";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -44,6 +45,12 @@ const Span = styled.span`
   }
 `;
 
+const LeaveChat = styled.button`
+  margin-top: 15px;
+  color: #cc2e21;
+  font-size: 15px;
+`;
+
 const Settings = () => {
   // Redux
   const { theme, soundNotifications } = useSelector(state => state.settings);
@@ -56,6 +63,9 @@ const Settings = () => {
   );
   const toggleNotificationsAction = useCallback(() => {
     dispatch(toggleSoundNotifications());
+  }, [dispatch]);
+  const clearMessagesAction = useCallback(() => {
+    dispatch(clearMessages());
   }, [dispatch]);
 
   const [data, setData] = useState({
@@ -98,6 +108,13 @@ const Settings = () => {
               onChange={() => toggleNotificationsAction()}
             />
             <Span>Sound Notifications</Span>
+          </Label>
+        </Field>
+        <Field>
+          <Label>
+            <LeaveChat onClick={() => clearMessagesAction()}>
+              Clear chat messages
+            </LeaveChat>
           </Label>
         </Field>
       </List>
