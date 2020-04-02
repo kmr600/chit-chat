@@ -4,6 +4,8 @@ const moment = require("moment");
 
 // store all users
 let users = [];
+// store all usernames who are currently typing
+let typing = [];
 // define limits
 const userLimit = 100;
 const usernameLimit = 16;
@@ -61,6 +63,16 @@ const removeUser = socketId => {
   }
 };
 
+const addToTyping = username => {
+  typing.push(username);
+  return typing;
+};
+
+const removeFromTyping = username => {
+  typing = typing.filter(u => u !== username);
+  return typing;
+};
+
 module.exports = server => {
   const io = SocketIO(server);
 
@@ -111,6 +123,18 @@ module.exports = server => {
           )} seconds`
         });
       }
+    });
+
+    // Show usernames of those who are currently typing messages
+    socket.on("typing", ({ username }) => {
+      addToTyping(username);
+      io.emit("typing", { typing });
+    });
+
+    // Remove usernames of those who are stopped typing messages
+    socket.on("notTyping", ({ username }) => {
+      removeFromTyping(username);
+      io.emit("notTyping", { typing });
     });
 
     // Remove user from chatroom on manual leave, such as clicking a button

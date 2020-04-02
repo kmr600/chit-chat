@@ -6,6 +6,8 @@ import {
   SEND_MESSAGE,
   NEW_MESSAGE,
   SET_MESSAGE_ERROR,
+  ADD_USER_TO_TYPING,
+  REMOVE_USER_FROM_TYPING,
   CLEAR_MESSAGES
 } from "./types";
 
@@ -61,6 +63,22 @@ export const setMessageError = ({ index, error }) => dispatch => {
   dispatch({
     type: SET_MESSAGE_ERROR,
     payload: { index, error }
+  });
+};
+
+// Add users who are typing to the typing list
+export const addUserToTyping = typing => dispatch => {
+  dispatch({
+    type: ADD_USER_TO_TYPING,
+    payload: typing
+  });
+};
+
+// Remove users who stopped typing from the typing list
+export const removeUserFromTyping = typing => dispatch => {
+  dispatch({
+    type: REMOVE_USER_FROM_TYPING,
+    payload: typing
   });
 };
 

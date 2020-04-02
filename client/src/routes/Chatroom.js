@@ -10,6 +10,7 @@ import Name from "../components/Name";
 import Message from "../components/Message";
 import JoinChat from "../components/JoinChat";
 import LeftChat from "../components/LeftChat";
+import Typing from "../components/Typing";
 import InputForm from "../components/InputForm";
 import allEyesAudio from "../sounds/all-eyes-on-me.mp3";
 import { useSelector, useDispatch } from "react-redux";
@@ -18,7 +19,9 @@ import {
   addUser,
   removeUser,
   newMessage,
-  setMessageError
+  setMessageError,
+  addUserToTyping,
+  removeUserFromTyping
 } from "../actions/chat";
 import findLastIndex from "../utils/findLastIndex";
 
@@ -66,7 +69,7 @@ const Chatroom = () => {
 
   // Redux
   const { user } = useSelector(state => state.auth);
-  const { messages } = useSelector(state => state.chat);
+  const { messages, typing } = useSelector(state => state.chat);
   const { isOpen } = useSelector(state => state.menu);
   const { soundNotifications } = useSelector(state => state.settings);
   const dispatch = useDispatch();
@@ -100,6 +103,18 @@ const Chatroom = () => {
     },
     [dispatch]
   );
+  const addUserToTypingAction = useCallback(
+    payload => {
+      dispatch(addUserToTyping(payload));
+    },
+    [dispatch]
+  );
+  const removeUserFromTypingAction = useCallback(
+    payload => {
+      dispatch(removeUserFromTyping(payload));
+    },
+    [dispatch]
+  );
 
   useSocket("newMessage", data => {
     newMessageAction(data);
@@ -108,6 +123,13 @@ const Chatroom = () => {
     if (soundNotifications) {
       allEyes.play();
     }
+  });
+
+  useSocket("typing", ({ typing }) => {
+    addUserToTypingAction(typing);
+  });
+  useSocket("notTyping", ({ typing }) => {
+    removeUserFromTypingAction(typing);
   });
 
   useSocket("join", ({ users, error, user }) => {
@@ -204,6 +226,8 @@ const Chatroom = () => {
                 <LeftChat key={key}>{message.username}</LeftChat>
               );
             })}
+
+            {typing.length > 0 && <Typing usernames={typing} />}
           </Chat>
 
           <VisibilitySensor onChange={isVisible => setInputInView(isVisible)}>

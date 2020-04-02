@@ -103,6 +103,8 @@ const Input = () => {
     message: ""
   });
 
+  const [typing, setTyping] = useState(false);
+
   // set username of outgoing message to logged in username
   useEffect(() => {
     if (user) {
@@ -114,6 +116,19 @@ const Input = () => {
   }, [user]);
 
   const { message } = data;
+
+  // show to users that you're typing
+  useEffect(() => {
+    if (message.length > 0) {
+      if (!typing) {
+        setTyping(true);
+        socket.emit("typing", { username: user.username });
+      }
+    } else {
+      setTyping(false);
+      socket.emit("notTyping", { username: user.username });
+    }
+  }, [message]);
 
   const handleChange = e => {
     setData({ ...data, [e.target.name]: e.target.value });

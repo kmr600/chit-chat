@@ -6,12 +6,15 @@ import {
   SEND_MESSAGE,
   NEW_MESSAGE,
   SET_MESSAGE_ERROR,
+  ADD_USER_TO_TYPING,
+  REMOVE_USER_FROM_TYPING,
   CLEAR_MESSAGES
 } from "../actions/types";
 
 const intialState = {
   messages: [],
   users: [],
+  typing: [],
   loading: false,
   error: false
 };
@@ -62,6 +65,12 @@ export default function(state = intialState, action) {
         ],
         error: false,
         loading: false
+      };
+    case ADD_USER_TO_TYPING:
+    case REMOVE_USER_FROM_TYPING:
+      return {
+        ...state,
+        typing: payload
       };
     case CLEAR_MESSAGES:
       return {
