@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Wrapper = styled.div`
   max-width: 100%;
   align-self: ${props => props.currentUser && "flex-end"};
-  margin-bottom: 14px;
+  margin-bottom: 6px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -17,17 +17,42 @@ const Wrapper = styled.div`
 `;
 
 const Bubble = styled.div`
-  border-radius: ${props =>
-    props.currentUser ? "16px 16px 0px 16px" : "0px 16px 16px 16px"};
   background: ${props =>
     props.currentUser ? props.theme.purple : props.theme.secondaryBgColor};
   color: ${props => (props.currentUser ? "#FFF" : props.theme.color)};
   display: inline-block;
-  padding: 12px 18px;
+  padding: 10px 12px;
   box-shadow: 0px 3px 10px rgba(68, 68, 68, 0.08);
   font-size: 15px;
-  line-height: 155%;
   overflow-wrap: break-word;
+
+  &.firstMsg {
+    border-radius: 16px 16px 16px 0;
+    /* default bubble style */
+    &.lastMsg {
+      border-radius: 16px 16px 16px 16px;
+    }
+  }
+  &.betweenMsg {
+    border-radius: 0 16px 16px 0;
+  }
+  &.lastMsg {
+    border-radius: 0 16px 16px 16px;
+  }
+  &.currentUser {
+    &.firstMsg {
+      border-radius: 16px 16px 0 16px;
+      &.lastMsg {
+        border-radius: 16px 16px 16px 16px;
+      }
+    }
+    &.betweenMsg {
+      border-radius: 16px 0 0 16px;
+    }
+    &.lastMsg {
+      border-radius: 16px 0 16px 16px;
+    }
+  }
 `;
 
 const NotDelivered = styled.p`
@@ -48,7 +73,7 @@ const Mention = styled.span`
   border-radius: 2px;
 `;
 
-const Message = ({ currentUser, error, errorMessage, children }) => {
+const Message = ({ currentUser, error, errorMessage, children, className }) => {
   // Redux
   const { username } = useSelector(state => state.auth.user);
 
@@ -57,15 +82,18 @@ const Message = ({ currentUser, error, errorMessage, children }) => {
   return (
     <Wrapper currentUser={currentUser}>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Bubble currentUser={currentUser}>
+        <Bubble
+          currentUser={currentUser}
+          className={`${className} ${currentUser && "currentUser"}`}
+        >
           {children.split(" ").map((word, i) =>
             word.match(regex) ? (
               <Fragment key={i}>
                 <Mention>{word}</Mention>{" "}
               </Fragment>
             ) : (
-                <Fragment key={i}>{word} </Fragment>
-              )
+              <Fragment key={i}>{word} </Fragment>
+            )
           )}
         </Bubble>
 
