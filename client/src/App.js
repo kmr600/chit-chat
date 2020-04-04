@@ -35,7 +35,9 @@ const App = () => {
   }, [theme]);
 
   const socketUrl =
-    process.env.NODE_ENV === "production" ? "/" : "http://localhost:5000";
+    process.env.NODE_ENV === "production"
+      ? "https://pacific-cove-51035.herokuapp.com"
+      : "http://localhost:5000";
 
   return (
     <SocketIOProvider url={socketUrl}>
