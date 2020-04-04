@@ -14,6 +14,7 @@ import Typing from "../components/Typing";
 import InputForm from "../components/InputForm";
 import allEyesAudio from "../sounds/all-eyes-on-me.mp3";
 import { useSelector, useDispatch } from "react-redux";
+import { chatJoinSuccess } from "../actions/auth";
 import {
   loadUsers,
   addUser,
@@ -73,6 +74,12 @@ const Chatroom = () => {
   const { isOpen } = useSelector(state => state.menu);
   const { soundNotifications } = useSelector(state => state.settings);
   const dispatch = useDispatch();
+  const chatJoinSuccessAction = useCallback(
+    payload => {
+      dispatch(chatJoinSuccess(payload));
+    },
+    [dispatch]
+  );
   const loadUsersAction = useCallback(
     payload => {
       dispatch(loadUsers(payload));
@@ -132,7 +139,14 @@ const Chatroom = () => {
     removeUserFromTypingAction(typing);
   });
 
-  useSocket("join", ({ users, error, user }) => {
+  useSocket("join", ({ users, user, error }) => {
+    chatJoinSuccessAction(user);
+
+    // load list of users from the backend
+    loadUsersAction(users);
+  });
+
+  useSocket("userHasJoined", ({ users, error, user }) => {
     // handle any errors if new users try to join
     if (error) return;
 

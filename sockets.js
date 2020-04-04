@@ -93,7 +93,11 @@ module.exports = server => {
         console.log("A user joined chat");
       }
 
-      io.emit("join", { users, error, user });
+      // allow the sender to join the chat
+      socket.emit("join", { users, error, user });
+
+      // display to other users who just joined the chat
+      socket.broadcast.emit("userHasJoined", { users, error, user });
     });
 
     // Send/receive messages
