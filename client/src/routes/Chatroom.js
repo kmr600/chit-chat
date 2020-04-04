@@ -24,6 +24,7 @@ import {
   removeUserFromTyping
 } from "../actions/chat";
 import findLastIndex from "../utils/findLastIndex";
+import { getMessageClassName } from "../utils/getMessageClassName";
 
 // sounds
 const allEyes = new UIfx(allEyesAudio, {
@@ -173,7 +174,6 @@ const Chatroom = () => {
 
   const [inputInView, setInputInView] = useState(true);
   const [inputIsFocused, setInputIsFocused] = useState(false);
-
   return (
     <div id="outer-container">
       <Menu />
@@ -196,6 +196,8 @@ const Chatroom = () => {
             )}
 
             {messages.map((message, key, allMessages) => {
+              const messageClassName = getMessageClassName(allMessages, key);
+
               return message.message ? (
                 message.username === user.username ? (
                   <Message
@@ -203,6 +205,7 @@ const Chatroom = () => {
                     error={message.error ? true : false}
                     errorMessage={message.error ? message.errorMessage : null}
                     key={key}
+                    className={messageClassName}
                   >
                     {message.message}
                   </Message>
@@ -217,7 +220,9 @@ const Chatroom = () => {
                           allMessages[key - 1].status === "leave"))) && (
                       <Name time={message.time}>{message.username}</Name>
                     )}
-                    <Message>{message.message}</Message>
+                    <Message className={messageClassName}>
+                      {message.message}
+                    </Message>
                   </Fragment>
                 )
               ) : message.status === "join" ? (
