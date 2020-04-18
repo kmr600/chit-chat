@@ -124,6 +124,12 @@ const Home = () => {
     // check if username has content
     if (!username.length) return;
 
+    // check if username has a space
+    if (username.trim().search(/[^\w]/) > -1) {
+      setError("Usernames cannot contain spaces.");
+      return;
+    }
+
     // cancel submission if username has profanity
     if (filter.isProfane(username)) {
       setError("Usernames cannot contain profanity.");
