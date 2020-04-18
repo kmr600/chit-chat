@@ -126,7 +126,9 @@ const Home = () => {
 
     // check if username has a space
     if (username.trim().search(/[^\w]/) > -1) {
-      setError("Usernames cannot contain spaces.");
+      setError(
+        "Usernames can only contain alphanumeric characters and underscores."
+      );
       return;
     }
 

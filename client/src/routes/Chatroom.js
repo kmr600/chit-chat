@@ -1,4 +1,10 @@
-import React, { Fragment, useCallback, useRef, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useRef,
+  useState,
+  useEffect
+} from "react";
 import styled from "styled-components";
 import { useSocket } from "use-socketio";
 import VisibilitySensor from "react-visibility-sensor";
@@ -126,6 +132,11 @@ const Chatroom = () => {
   useSocket("newMessage", data => {
     newMessageAction(data);
 
+    // increment unread messages if user is not at the bottom of the chat
+    if (!inputInView) {
+      setUnreadMessages(true);
+    }
+
     // if sounds notifications are on, play audio for incoming messages
     if (soundNotifications) {
       allEyes.play();
@@ -188,6 +199,19 @@ const Chatroom = () => {
   const [inputInView, setInputInView] = useState(true);
   const [inputIsFocused, setInputIsFocused] = useState(false);
 
+  const [unreadMessages, setUnreadMessages] = useState(false);
+
+  useEffect(() => {
+    // scroll to the bottom when messages are added and when scroll to bottom button is not in view
+    if (messages && inputInView) {
+      scrollToBottom();
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    setUnreadMessages(false);
+  }, [inputInView]);
+
   return (
     <div id="outer-container">
       <Menu />
@@ -197,7 +221,7 @@ const Chatroom = () => {
 
         {((!inputInView && !isOpen) || (inputIsFocused && !isOpen)) && (
           <ScrollToBottom onClick={() => scrollToBottom()}>
-            Scroll to bottom
+            {unreadMessages ? `New messages below` : "Scroll to bottom"}
           </ScrollToBottom>
         )}
 
