@@ -10,11 +10,14 @@ const Wrapper = styled.div`
   word-break: break-word;
   line-height: 155%;
   font-style: italic;
+  user-select: none;
 `;
 
 const Typing = ({ usernames }) => {
   return usernames.length < 3 ? (
-    usernames.length === 1 ? (
+    usernames.length === 0 ? (
+      <Wrapper>&nbsp;</Wrapper>
+    ) : usernames.length === 1 ? (
       <Wrapper>{usernames[0]} is typing...</Wrapper>
     ) : (
       <Wrapper>

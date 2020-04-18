@@ -241,7 +241,7 @@ const Chatroom = () => {
               );
             })}
 
-            {typing.length > 0 && <Typing usernames={typing} />}
+            <Typing usernames={typing} />
           </Chat>
 
           <VisibilitySensor onChange={isVisible => setInputInView(isVisible)}>
