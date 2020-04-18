@@ -28,6 +28,7 @@ const Bubble = styled.div`
   font-size: 15px;
   line-height: 155%;
   overflow-wrap: break-word;
+  word-break: break-word;
 `;
 
 const NotDelivered = styled.p`
@@ -64,8 +65,8 @@ const Message = ({ currentUser, error, errorMessage, children }) => {
                 <Mention>{word}</Mention>{" "}
               </Fragment>
             ) : (
-                <Fragment key={i}>{word} </Fragment>
-              )
+              <Fragment key={i}>{word} </Fragment>
+            )
           )}
         </Bubble>
 
