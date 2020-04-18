@@ -147,6 +147,9 @@ module.exports = server => {
 
       if (user) {
         io.emit("leave", { users, username: socket.username });
+        // if user leaves while typing, remove their name from active typers
+        removeFromTyping(socket.username);
+        io.emit("notTyping", { typing });
       }
 
       console.log("A user left chat");
@@ -158,7 +161,11 @@ module.exports = server => {
 
       if (user) {
         io.emit("leave", { users, username: socket.username });
+        // if user leaves while typing, remove their name from active typers
+        removeFromTyping(socket.username);
+        io.emit("notTyping", { typing });
       }
+
       console.log("A user disconnected");
     });
   });
