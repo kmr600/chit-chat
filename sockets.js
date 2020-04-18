@@ -1,6 +1,5 @@
 const SocketIO = require("socket.io");
 const { RateLimiterMemory } = require("rate-limiter-flexible");
-const moment = require("moment");
 
 // store all users
 let users = [];
@@ -116,7 +115,7 @@ module.exports = server => {
         }
 
         // Add timestamp
-        const time = moment().format("h:mm a");
+        const time = new Date().toUTCString();
 
         socket.broadcast.emit("newMessage", { username, message, time });
       } catch (err) {

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import Moment from "react-moment";
 
 const Wrapper = styled.div`
   margin-top: 12px;
@@ -28,7 +29,14 @@ const Name = ({ children, time, host }) => {
           👑&nbsp;
         </span>
       )}
-      {children} {time && <Time>{time}</Time>}
+      {children}
+      {time && (
+        <Time>
+          <Moment local format={"H:mm a"}>
+            {time}
+          </Moment>
+        </Time>
+      )}
     </Wrapper>
   );
 };
