@@ -9,8 +9,10 @@ import ArrowUp from "../icons/ArrowUp";
 import profanityAudio from "../sounds/watch-your-profanity.mp3";
 import { useDispatch } from "react-redux";
 import { sendMessage } from "../actions/chat";
+import {GiphyFetch} from "@giphy/js-fetch-api"
 
 const filter = new Filter();
+const giphyfetch = new GiphyFetch("DL7YFptyv83jER6bXMfwhXOg65oFo713");
 
 // sounds
 const profanity = new UIfx(profanityAudio, {
@@ -134,29 +136,49 @@ const Input = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     // check if message has content
     if (!message.length) return;
 
     // filter out profanity
-    const filteredMessage = filter.clean(message);
+    let filteredMessage = filter.clean(message);
 
     // if message has profanity, play audio
     if (filter.isProfane(message) && soundNotifications) {
       profanity.play();
     }
 
-    // add message to chatroom
-    sendMessageAction({
+    let payload = {
       ...data,
-      message: filteredMessage,
-      error: false,
-      errorMessage: ""
-    });
+    }
+    
+    if(filteredMessage.startsWith("/giphy")) {
+      // Removing the /giphy part
+      const term = filteredMessage.split(" ").slice(1).join(" ")
+
+      // Getting a gif based on the keyword/term entered
+      const {data} = await giphyfetch.search(term, {limit: 1, offset: Math.floor(Math.random() * 100), rating: "pg-13"})
+      const [gif] = data
+
+      if(gif) {
+        payload = {...payload, gif, type: "gif"}
+        socket.emit("sendMessage", payload);
+      } else {
+        // Setting system message to inform the user that no gif was found
+        const message = "Sorry, no matching gif found...This message is only visible to you."
+        payload = {...payload, message, type: "info"}
+      }
+
+    } else {
+      const message = filteredMessage
+      payload = {...payload, message, type: "message"}
+      socket.emit("sendMessage", payload);
+    }
+    // add message to chatroom
+    sendMessageAction({...payload, error: false, errorMessage: ""});
     // send data to server for others to receive
-    socket.emit("sendMessage", { ...data, message: filteredMessage });
     // clear input
     setData({ ...data, message: "" });
     // set focus back to text area

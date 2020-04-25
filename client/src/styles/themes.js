@@ -4,7 +4,8 @@ export const themes = {
     bold: "500",
     linkColor: "#7A7D82",
     subColor: "#939597",
-    purple: "#BA8AF8"
+    purple: "#BA8AF8",
+    info: "#34c1df"
   },
   light: {
     type: "light",

@@ -21,6 +21,8 @@ import InputForm from "../components/InputForm";
 import allEyesAudio from "../sounds/all-eyes-on-me.mp3";
 import { useSelector, useDispatch } from "react-redux";
 import { chatJoinSuccess } from "../actions/auth";
+import GifMessage from "../components/GifMessage"
+import InfoMessage from "../components/InfoMessage"
 import {
   loadUsers,
   addUser,
@@ -234,14 +236,18 @@ const Chatroom = () => {
             )}
 
             {messages.map((message, key, allMessages) => {
-              return message.message ? (
-                message.username === user.username ? (
-                  <Message
+              if(message.type === "gif") {
+                return <GifMessage currentUser={message.username === user.username} key={key} gif={message.gif} />
+              } else if (message.type === "message") {
+
+                return message.message ? (
+                  message.username === user.username ? (
+                    <Message
                     currentUser={true}
                     error={message.error ? true : false}
                     errorMessage={message.error ? message.errorMessage : null}
                     key={key}
-                  >
+                    >
                     {message.message}
                   </Message>
                 ) : (
@@ -252,17 +258,21 @@ const Chatroom = () => {
                       allMessages[key - 1].username !== message.username ||
                       (allMessages[key - 1].username === message.username &&
                         (allMessages[key - 1].status === "join" ||
-                          allMessages[key - 1].status === "leave"))) && (
-                      <Name time={message.time}>{message.username}</Name>
-                    )}
+                        allMessages[key - 1].status === "leave"))) && (
+                          <Name time={message.time}>{message.username}</Name>
+                          )}
                     <Message>{message.message}</Message>
                   </Fragment>
                 )
-              ) : message.status === "join" ? (
-                <JoinChat key={key}>{message.username}</JoinChat>
-              ) : (
-                <LeftChat key={key}>{message.username}</LeftChat>
-              );
+                ) : message.status === "join" ? (
+                  <JoinChat key={key}>{message.username}</JoinChat>
+                  ) : (
+                    <LeftChat key={key}>{message.username}</LeftChat>
+                    );
+              } else if(message.type === "info") {
+                // Info messages will only ever be shown to the currentuser, hence why we dont need to pass it as a prop
+                return <InfoMessage key={key}>{message.message}</InfoMessage>
+              }
             })}
 
             <Typing usernames={typing} />
