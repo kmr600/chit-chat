@@ -170,7 +170,7 @@ const Home = () => {
           <span role="img" aria-label="logo">
             💬 &nbsp;
           </span>
-          Chat
+          Chit Chat
         </Title>
 
         <Text>What should we call you?</Text>

@@ -17,6 +17,12 @@ const Wrapper = styled.div`
   font-size: 50px;
   z-index: 1000;
 `;
+const Title = styled.h1`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 36px;
+`;
 
 const LoadingScreen = () => {
   const { loading } = useSelector(state => state.auth);
@@ -24,9 +30,12 @@ const LoadingScreen = () => {
   return (
     loading && (
       <Wrapper>
-        <span role="img" aria-label="logo">
-          💬
-        </span>
+        <Title>
+          <span role="img" aria-label="logo">
+            💬
+          </span>
+          <br/>Loading chatroom...
+        </Title>
       </Wrapper>
     )
   );

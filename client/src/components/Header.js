@@ -73,7 +73,7 @@ const Header = () => {
               <span role="img" aria-label="logo">
                 💬
               </span>
-              &nbsp;Chat
+              &nbsp;Chit Chat
             </Title>
             <OnlineWrapper>
               <OnlineCircle />
