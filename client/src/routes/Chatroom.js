@@ -21,6 +21,9 @@ import InputForm from "../components/InputForm";
 import allEyesAudio from "../sounds/all-eyes-on-me.mp3";
 import { useSelector, useDispatch } from "react-redux";
 import { chatJoinSuccess } from "../actions/auth";
+import GifMessage from "../components/GifMessage"
+import isSameUserMemo from "../utils/isSameUserMemo"
+import InfoMessage from "../components/InfoMessage"
 import {
   loadUsers,
   addUser,
@@ -69,17 +72,19 @@ const ScrollToBottom = styled.button`
   @media (max-width: 425px) {
     font-size: 13px;
   }
-`;
-
-const Chatroom = () => {
-  const inputForm = useRef(null);
-
-  // Redux
-  const { user } = useSelector(state => state.auth);
-  const { messages, typing } = useSelector(state => state.chat);
-  const { isOpen } = useSelector(state => state.menu);
-  const { soundNotifications } = useSelector(state => state.settings);
-  const dispatch = useDispatch();
+  `;
+  
+  const Chatroom = () => {
+    const inputForm = useRef(null);
+    
+    // Redux
+    const { user } = useSelector(state => state.auth);
+    const { messages, typing } = useSelector(state => state.chat);
+    const { isOpen } = useSelector(state => state.menu);
+    const { soundNotifications } = useSelector(state => state.settings);
+    const dispatch = useDispatch();
+    // We initialize it here so the object gets cleared on rerender
+    const isSame = isSameUserMemo()
   const chatJoinSuccessAction = useCallback(
     payload => {
       dispatch(chatJoinSuccess(payload));
@@ -128,6 +133,8 @@ const Chatroom = () => {
     },
     [dispatch]
   );
+
+
 
   useSocket("newMessage", data => {
     newMessageAction(data);
@@ -181,7 +188,6 @@ const Chatroom = () => {
     // Load list of users from the backend
     loadUsersAction(users);
   });
-
   useSocket("rateLimitReached", ({ error }) => {
     // get index of message so that an error can be applied
     const indexOfNotDelivered = findLastIndex(
@@ -206,7 +212,7 @@ const Chatroom = () => {
     if (messages && inputInView) {
       scrollToBottom();
     }
-  }, [messages]);
+  }, [messages, inputInView]);
 
   useEffect(() => {
     setUnreadMessages(false);
@@ -233,36 +239,48 @@ const Chatroom = () => {
               </StartConversation>
             )}
 
-            {messages.map((message, key, allMessages) => {
-              return message.message ? (
-                message.username === user.username ? (
-                  <Message
+            {messages.map((message, key) => {
+              // needs to stay here to keep object up to date with the prev user
+              const sameAsPrev = isSame(message.username)
+              
+              if(message.type === "gif") {
+                return( 
+                  <Fragment key={key}>
+                { message.username !== user.username && !sameAsPrev && <Name time={message.time}>{message.username}</Name>}
+                <GifMessage currentUser={message.username === user.username} key={key} gif={message.gif} />
+                </Fragment>
+                )
+              } else if (message.type === "message") {
+
+                return message.message ? (
+                  message.username === user.username ? (
+                    <Message
                     currentUser={true}
                     error={message.error ? true : false}
                     errorMessage={message.error ? message.errorMessage : null}
                     key={key}
-                  >
+                    >
                     {message.message}
                   </Message>
                 ) : (
                   <Fragment key={key}>
                     {/* don't show username if previous message was sent by the same user */}
                     {/* show username if previous message was a status message such as join or leave */}
-                    {(key === 0 ||
-                      allMessages[key - 1].username !== message.username ||
-                      (allMessages[key - 1].username === message.username &&
-                        (allMessages[key - 1].status === "join" ||
-                          allMessages[key - 1].status === "leave"))) && (
-                      <Name time={message.time}>{message.username}</Name>
-                    )}
+                    { !sameAsPrev && (
+                          <Name time={message.time}>{message.username}</Name>
+                          )}
                     <Message>{message.message}</Message>
                   </Fragment>
                 )
-              ) : message.status === "join" ? (
-                <JoinChat key={key}>{message.username}</JoinChat>
-              ) : (
-                <LeftChat key={key}>{message.username}</LeftChat>
-              );
+                ) : message.status === "join" ? (
+                  <JoinChat key={key}>{message.username}</JoinChat>
+                  ) : (
+                    <LeftChat key={key}>{message.username}</LeftChat>
+                    );
+              } else if(message.type === "info") {
+                // Info messages will only ever be shown to the currentuser, hence why we dont need to pass it as a prop
+                return <InfoMessage key={key}>{message.message}</InfoMessage>
+              }
             })}
 
             <Typing usernames={typing} />

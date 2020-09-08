@@ -100,26 +100,34 @@ module.exports = server => {
     });
 
     // Send/receive messages
-    socket.on("sendMessage", async ({ username, message }) => {
+    socket.on("sendMessage", async ({ username, message, gif, type }) => {
       try {
         // check if user has gone over rate limit. consume 1 point per event from IP
         await rateLimiter.consume(socket.id);
 
-        // Clean the data
-        message = message.trim();
+        let payload = {type, username}
 
-        // Check message character limit
-        if (message.length === 0 || message.length > messageLimit) {
-          const error = `Messages must between 1 and ${messageLimit} characters.`;
-          return io.to(`${socket.id}`).emit("messageError", error);
+        if(type !== "gif") {
+          // Clean the data
+          message = message.trim();
+          
+          // Check message character limit
+          if (message.length === 0 || message.length > messageLimit) {
+            const error = `Messages must between 1 and ${messageLimit} characters.`;
+            return io.to(`${socket.id}`).emit("messageError", error);
+          }
+
+          payload = {...payload, message}
+        } else {
+          payload = {...payload, gif}
         }
-
-        // Add timestamp
-        const time = new Date().toUTCString();
-
-        socket.broadcast.emit("newMessage", { username, message, time });
-      } catch (err) {
-        // rate limit reached. no available points to consume
+          
+          // Add timestamp
+          const time = new Date().toUTCString();
+          
+          socket.broadcast.emit("newMessage", { ...payload, time });
+        } catch (err) {
+          // rate limit reached. no available points to consume
         socket.emit("rateLimitReached", {
           error: `Rate limit reached. Try again in ${Math.round(
             err.msBeforeNext / 1000
