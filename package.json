@@ -22,7 +22,7 @@
   "homepage": "https://github.com/kmr600/chat-app#readme",
   "dependencies": {
     "concurrently": "^5.1.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "helmet": "^3.22.0",
     "nodemon": "^2.0.2",
     "rate-limiter-flexible": "^2.1.3",
